@@ -1,0 +1,13 @@
+@use '../../Styles/Partials/mixins' as *;
+@use '../../Styles/Partials/typography' as *;
+
+.container {
+    &__slider {
+        display: flex;
+    }
+    &__img {
+        height: 200px;
+        width: 200px;
+        background-color: lightblue;
+    }
+}
