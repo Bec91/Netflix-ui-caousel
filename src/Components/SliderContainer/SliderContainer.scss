@@ -1,13 +1,143 @@
 @use '../../Styles/Partials/mixins' as *;
 @use '../../Styles/Partials/typography' as *;
 
+:root {
+    --up: 3;
+    --handle-size: 3rem;
+    --img-gap: 0.25rem;
+    --slider-padding: 5rem;
+    --card-margin: 0;
+    --cardWidth: calc(7vw/var(--up));
+    --carouselWidth: calc(var(--cardWidth) * var(--num));
+    @media screen and (min-width: 320px) { /*mobile*/
+        --up: 1;
+        &__slider {
+          --items-per-screen: 1;
+        }
+      }
+      @media screen and (min-width: 768px) { /*tablet*/
+        --up: 2;
+        --cardWidth: calc(18.5vw/var(--up));
+        &__slider {
+          --items-per-screen: 3;
+        }
+      }
+      @media screen and (min-width: 1280px) { /*desktop*/
+        --cardWidth: calc(20vw/var(--up));
+        &__slider {
+          --items-per-screen: 5;
+        }
+      }
+      @media screen and (min-width: 2000px) { /*monitor*/
+        --cardWidth: calc(21.47vw/var(--up));
+      }
+}
+body {
+  margin: 0;
+}
+
 .container {
+    display: flex;
+    justify-content: space-between;
+    // margin: auto;
+    overflow: hidden;
+    position: relative;
     &__slider {
+        --slider-index: 0;
+        --items-per-screen: 4;
+        flex-grow: 1;
+        margin: 0 var(--img-gap);
+        transform: translate(calc((var(--slider-index) * -100%)));
+        transition: transform 250ms ease-in-out;
+        width: var(--carouselWidth);
         display: flex;
+        list-style: none;
+        padding-left: 0;
+        @include monitor-breakpoint {
+          justify-content: space-evenly;
+        }
+      &.prev {
+        animation-duration: .6s;
+        animation-timing-function:cubic-bezier(0.83, 0, 0.17, 1);
+        animation-name: prev;
+      }
+      &.next {
+        animation-duration: .6s;
+        animation-timing-function:cubic-bezier(0.83, 0, 0.17, 1);
+        animation-name: next;
+      }  
+    }
+    &__holder {
+        display: flex;
+        width: calc(var(--cardWidth) - var(--card-margin) * 2); 
+        padding-right: 0.5rem;
+        @include monitor-breakpoint {
+          padding: 0 1rem 0 0;
+        }
     }
     &__img {
-        height: 200px;
-        width: 200px;
-        background-color: lightblue;
+        padding: var(--img-gap);
+        flex: 0 0 25%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        margin: 0 0.25rem;
+        @include tablet-breakpoint {
+          margin: 0 0.5rem;
+        }
+    }
+    &__handle {
+        flex-shrink: 0;
+        margin: var(--img-gap) 0;
+        width: var(--handle-size);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        flex-grow: 0;
+        font-size: 5rem;
+        color: #FFF;
+        line-height: 0;
+        background-color: rgba(0, 0, 0, 0.25);
+        margin: 0.25rem 0;
+        padding: 0 0.5rem;
+        cursor: pointer;
+        transition: background-color 150ms ease-in-out;
+        &--text {
+            transition: transform 150ms ease-in-out;
+        }
+        &--text:hover,
+        &--text:focus {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #FFF;
+            transform: scale(1.1);
+        }
+        &:hover,
+        &:focus {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #FFF;
+            transform: scale(1.1);
+        }
+        &--left:hover {
+        }
+        &--right {
+        }
     }
 }
+@keyframes next {
+    from {
+      transform:translateX(0px);
+    }
+    to {
+      transform:translateX(calc(0px + var(--cardWidth)));
+    }
+  }
+  @keyframes prev {
+    from {
+      transform:translateX(0px);
+    }
+    to {
+      transform:translateX(calc(0px - var(--cardWidth)));
+    }
+  }
+  
